@@ -1,0 +1,71 @@
+/* AddPetForm.css */
+#addPet {
+  margin-top: 40px;
+  padding: 20px;
+  padding-left: 240px;
+}
+
+#addPet h2 {
+  margin-bottom: 20px;
+}
+
+#addPet form {
+  display: flex;
+  flex-direction: column;
+}
+
+#addPet label {
+  margin: 10px 0 5px;
+}
+
+#addPet input {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  width: 50%;
+}
+
+#addPet button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #27ae60;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  width: fit-content;
+}
+
+#addPet button:hover {
+  background-color: #2ecc71;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  #addPet {
+    padding-left: 0;
+    margin-top: 80px;
+  }
+
+  #addPet input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  #addPet {
+    padding: 10px;
+  }
+
+  #addPet h2 {
+    font-size: 18px;
+  }
+
+  #addPet input {
+    font-size: 14px;
+  }
+
+  #addPet button {
+    padding: 8px 16px;
+  }
+}

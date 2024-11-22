@@ -1,0 +1,44 @@
+/* Header.css */
+.header {
+  background-color: #2980b9;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: fixed;
+  top: 0;
+  left: 225px;
+  width: 83%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  margin: 0;
+  font-size: 24px;
+  /* padding-right: 100px; */
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .header {
+    left: 0;
+    width: 100%;
+    padding: 15px;
+  }
+
+  .header h1 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 10px;
+  }
+
+  .header h1 {
+    font-size: 18px;
+  }
+}

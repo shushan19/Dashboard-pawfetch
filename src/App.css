@@ -1,0 +1,88 @@
+/* App.css */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+.contaier {
+  /* background-color: red; */
+  width: 100%;
+}
+.admin-dashboard {
+  background-color: yellow;
+  display: flex;
+  flex-direction: row;
+}
+
+.main-content {
+  /* background-color: green; */
+  margin-left: 220px;
+  padding: 20px;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .admin-dashboard {
+    flex-direction: column;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 10px;
+  }
+
+  .sidebar ul {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  .sidebar ul li {
+    margin: 0;
+  }
+
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px;
+  }
+
+  .main-content {
+    margin-top: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    display: none;
+  }
+
+  .header {
+    padding: 10px;
+  }
+
+  .main-content {
+    padding: 10px;
+  }
+}
