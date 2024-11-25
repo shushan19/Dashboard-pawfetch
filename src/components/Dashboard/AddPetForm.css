@@ -1,71 +1,110 @@
-/* AddPetForm.css */
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Container for the form */
 #addPet {
-  margin-top: 40px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 40px auto;
+  max-width: 500px;
   padding: 20px;
-  padding-left: 240px;
+  text-align: center;
 }
 
+/* Heading styles */
 #addPet h2 {
+  color: #4caf50;
+  font-size: 24px;
   margin-bottom: 20px;
 }
 
-#addPet form {
-  display: flex;
-  flex-direction: column;
+/* Form labels */
+form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: left;
 }
 
-#addPet label {
-  margin: 10px 0 5px;
-}
-
-#addPet input {
+/* Form inputs */
+form input[type="text"],
+form input[type="number"],
+form input[type="file"],
+form select,
+form textarea {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 20px;
   padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-  width: 50%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-#addPet button {
-  padding: 10px 20px;
+/* Dropdown select */
+form select {
+  appearance: none;
+  background: #fff
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23333' d='M0 0l5 5 5-5z'/%3E%3C/svg%3E")
+    no-repeat right 10px center;
+  background-size: 10px;
+}
+
+/* Textarea */
+form textarea {
+  height: 80px;
+  resize: vertical;
+}
+
+/* File input styles */
+form input[type="file"] {
+  padding: 5px;
+  font-size: 14px;
+}
+
+/* Image preview */
+.image-preview {
+  display: block;
+  margin: 10px auto 20px;
+  max-height: 150px;
+  max-width: 100%;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Button styles */
+form button {
+  background-color: #4caf50;
   border: none;
-  background-color: #27ae60;
+  border-radius: 4px;
   color: white;
-  border-radius: 5px;
   cursor: pointer;
-  width: fit-content;
+  font-size: 16px;
+  padding: 12px 20px;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
 }
 
-#addPet button:hover {
-  background-color: #2ecc71;
+form button:hover {
+  background-color: #45a049;
 }
 
-/* Media Queries */
-@media (max-width: 768px) {
+/* Responsive adjustments */
+@media (max-width: 600px) {
   #addPet {
-    padding-left: 0;
-    margin-top: 80px;
+    padding: 15px;
+    margin: 20px;
   }
 
-  #addPet input {
+  form button {
     width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  #addPet {
-    padding: 10px;
-  }
-
-  #addPet h2 {
-    font-size: 18px;
-  }
-
-  #addPet input {
-    font-size: 14px;
-  }
-
-  #addPet button {
-    padding: 8px 16px;
   }
 }
