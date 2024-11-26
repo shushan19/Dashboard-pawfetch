@@ -15,6 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { setLoggedIn, setUserDetail } from "./store/slice/loginStatusSlice";
 import axios from "axios";
+import SinglePet from "./Pages/singlepet/SinglePet";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -54,6 +55,8 @@ const App = () => {
           <Route path="/adoptions" element={<AdoptionRequests />} />
           <Route path="/users" element={<UserManagement />} />
           <Route path="/login" element={<Login />} />
+
+          <Route path="/pets/:id" element={<SinglePet />} />
         </Routes>
       </div>
     </div>
