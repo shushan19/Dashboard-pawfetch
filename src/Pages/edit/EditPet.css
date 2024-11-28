@@ -1,0 +1,63 @@
+/* EditPet.css */
+.edit-pet-container {
+  margin: 100px auto; /* Large margin on top and center the form horizontally */
+  padding: 20px;
+  max-width: 600px; /* Limit the form width */
+  background-color: #f9f9f9; /* Light background */
+  border: 1px solid #ccc; /* Subtle border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+.image-preview {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.image-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.edit-pet-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333; /* Darker text color */
+}
+
+.edit-pet-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Space between form elements */
+}
+
+.edit-pet-container input,
+.edit-pet-container textarea,
+.edit-pet-container select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.edit-pet-container textarea {
+  resize: none; /* Prevent resizing of the textarea */
+  height: 100px; /* Set a fixed height */
+}
+
+.edit-pet-container button {
+  padding: 12px;
+  background-color: #007bff; /* Blue button color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit-pet-container button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}

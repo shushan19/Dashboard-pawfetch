@@ -29,6 +29,9 @@ const PetList = () => {
   const handelNavigate = (id) => {
     navigate(`/pets/${id}`);
   };
+  const handelEdit = (id) => {
+    navigate(`/pets/edit/${id}`);
+  };
   const { userDetail } = useSelector((state) => state.loginStatus);
   useEffect(() => {
     if (userDetail?._id) {
@@ -60,7 +63,7 @@ const PetList = () => {
                 <td>{pet.age}</td>
                 <td>
                   <button onClick={() => handelNavigate(pet._id)}>View</button>
-                  <button>Edit</button>
+                  <button onClick={() => handelEdit(pet._id)}>Edit</button>
                   <button onClick={() => deletePets(pet._id)}>Delete</button>
                 </td>
               </tr>
