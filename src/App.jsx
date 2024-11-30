@@ -17,6 +17,9 @@ import { setLoggedIn, setUserDetail } from "./store/slice/loginStatusSlice";
 import axios from "axios";
 import SinglePet from "./Pages/singlepet/SinglePet";
 import EditPets from "./Pages/edit/EditPets";
+import SuperAdminDashboard from "./Pages/superAdmin/SuperAdminDashboard";
+import IndividualListPage from "./Pages/individualListPage/IndividualListPage";
+import OrganizationListPage from "./Pages/organizationListPage/OrganizationListPage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -65,6 +68,9 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/pets/edit/:id" element={<EditPets />} />
           <Route path="/pets/:id" element={<SinglePet />} />
+          <Route path='/superadmindashboard' element={<SuperAdminDashboard/>}/>
+          <Route path='/individualslist' element={<IndividualListPage/>}/>
+          <Route path="/organizationslist" element={<OrganizationListPage/>}/>
         </Routes>
       </div>
     </div>
