@@ -53,7 +53,7 @@ const EditPets = () => {
             vaccination_status,
             image,
           });
-          setPreview(`${import.meta.env.VITE_BACKEND_URL}/${image}`);
+          setPreview(`${import.meta.env.VITE_BACKEND_URL}/${image?.slice(6)}`);
         } else {
           toast.error("No Pet Found!");
           navigate("/pets");

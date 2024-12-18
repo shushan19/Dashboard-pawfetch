@@ -8,7 +8,13 @@ import AdoptionRequests from "./components/Dashboard/AdoptionRequests";
 import UserManagement from "./components/Dashboard/UserManagement";
 import Statistics from "./components/Dashboard/Statistics";
 import "./App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useNavigate,
+  useSearchParams,
+  Navigate,
+} from "react-router-dom";
 import Login from "./Pages/Login/Login";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,7 +30,17 @@ import OrganizationListPage from "./Pages/organizationListPage/OrganizationListP
 const App = () => {
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.loginStatus);
+  const { userDetail } = useSelector((state) => state.loginStatus);
   const navigate = useNavigate();
+
+  if (
+    ((userDetail.role === "Individual" || userDetail.role === "Organization") &&
+      window.location.href.includes("superadmindashboard")) ||
+    window.location.href.includes("individualslist") ||
+    window.location.href.includes("organizationslist")
+  ) {
+    navigate("/");
+  }
 
   useEffect(() => {
     const token = localStorage.getItem("adminAuthToken");
@@ -50,7 +66,7 @@ const App = () => {
       dispatch(setUserDetail(response.data.data));
     };
     fetchUserDetails();
-  });
+  }, []);
   return (
     <div className="contaier">
       <div className="admin-dashboard">
@@ -60,17 +76,43 @@ const App = () => {
         <Header />
         <ToastContainer />
         <Routes>
-          <Route path="/" element={<Statistics />} />
-          <Route path="/pets" element={<PetList />} />
-          <Route path="/add-pet" element={<AddPetForm />} />
-          <Route path="/adoptions" element={<AdoptionRequests />} />
-          <Route path="/users" element={<UserManagement />} />
+          <Route
+            path="/"
+            element={isLoggedIn ? <Statistics /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/pets"
+            element={isLoggedIn ? <PetList /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/add-pet"
+            element={isLoggedIn ? <AddPetForm /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/adoptions"
+            element={
+              isLoggedIn ? <AdoptionRequests /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/users"
+            element={isLoggedIn ? <UserManagement /> : <Navigate to="/login" />}
+          />
           <Route path="/login" element={<Login />} />
-          <Route path="/pets/edit/:id" element={<EditPets />} />
-          <Route path="/pets/:id" element={<SinglePet />} />
-          <Route path='/superadmindashboard' element={<SuperAdminDashboard/>}/>
-          <Route path='/individualslist' element={<IndividualListPage/>}/>
-          <Route path="/organizationslist" element={<OrganizationListPage/>}/>
+          <Route
+            path="/pets/edit/:id"
+            element={isLoggedIn ? <EditPets /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/pets/:id"
+            element={isLoggedIn ? <SinglePet /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/superadmindashboard"
+            element={<SuperAdminDashboard />}
+          />
+          <Route path="/individualslist" element={<IndividualListPage />} />
+          <Route path="/organizationslist" element={<OrganizationListPage />} />
         </Routes>
       </div>
     </div>

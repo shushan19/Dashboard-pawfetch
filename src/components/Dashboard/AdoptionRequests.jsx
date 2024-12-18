@@ -1,13 +1,22 @@
 // components/Dashboard/AdoptionRequests.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./AdoptionRequests.css";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const AdoptionRequests = () => {
-  const requests = [
-    { id: 1, user: "John Doe", pet: "Bella", status: "Pending" },
-    { id: 2, user: "Jane Smith", pet: "Whiskers", status: "Pending" },
-  ];
-
+  const { userDetail } = useSelector((state) => state.loginStatus);
+  const [request, setRequest] = useState(null);
+  useEffect(() => {
+    const fetchAllRequest = async () => {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/getAllFormRequest`,
+        { userId: userDetail?._id }
+      );
+      setRequest(response.data.data);
+    };
+    fetchAllRequest();
+  }, [userDetail?._id]);
   return (
     <div id="adoptions">
       <h2>Adoption Requests</h2>
@@ -15,17 +24,25 @@ const AdoptionRequests = () => {
         <thead>
           <tr>
             <th>User</th>
-            <th>Pet</th>
-            <th>Status</th>
+            <th>Pet Name</th>
+            <th>Image</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {requests.map((request) => (
-            <tr key={request.id}>
-              <td>{request.user}</td>
-              <td>{request.pet}</td>
-              <td>{request.status}</td>
+          {request?.map((request) => (
+            <tr key={request?._id}>
+              <td>{request?.fullName}</td>
+              <td>{request?.currentPets[0]?.name}</td>
+              <td>
+                <img
+                  src={`${
+                    import.meta.env.VITE_BACKEND_URL
+                  }/${request?.currentPets[0]?.image?.slice(6)}`}
+                  alt=""
+                  className="rounded-3xl"
+                />
+              </td>
               <td>
                 <button>Approve</button>
                 <button>Decline</button>

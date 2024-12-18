@@ -25,7 +25,11 @@
   margin-bottom: 20px;
   color: #333; /* Darker text color */
 }
-
+.image-preview {
+  img {
+    max-width: 100px;
+  }
+}
 .edit-pet-container form {
   display: flex;
   flex-direction: column;

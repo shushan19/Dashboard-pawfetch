@@ -8,6 +8,22 @@ import { useNavigate } from "react-router-dom";
 const AddPetForm = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.loginStatus.userDetail);
+  const [category, setCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  useEffect(() => {
+    const fetchAllCategory = async () => {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/getallcategory`
+      );
+      if (response.status === 200) {
+        setCategory(response.data);
+      } else {
+        toast.error("Error fetch categories");
+      }
+    };
+    fetchAllCategory();
+  }, []);
 
   const [petData, setPetData] = useState({
     name: "",
@@ -47,18 +63,18 @@ const AddPetForm = () => {
 
     const formData = new FormData();
 
-    formData.append("name", petData.name);
-    formData.append("image", petData.image);
-    formData.append("age", petData.age);
-    formData.append("gender", petData.gender);
-    formData.append("category", petData.category);
-    formData.append("address", petData.address);
-    formData.append("owner", petData.owner);
-    formData.append("vaccination_status", petData.vaccination_status);
-    formData.append("health_issue", petData.health_issue);
-    formData.append("medication", petData.medication);
-    formData.append("breed", petData.breed);
-    formData.append("description", petData.description);
+    formData.append("name", petData?.name);
+    formData.append("image", petData?.image);
+    formData.append("age", petData?.age);
+    formData.append("gender", petData?.gender);
+    formData.append("category", selectedCategory);
+    formData.append("address", petData?.address);
+    formData.append("vaccination_status", petData?.vaccination_status);
+    formData.append("health_issue", petData?.health_issue);
+    formData.append("medication", petData?.medication);
+    formData.append("breed", petData?.breed);
+    formData.append("description", petData?.description);
+    formData.append("owner", user._id);
 
     // for (let [key, value] of formData.entries()) {
     //   console.log(`${key}:`, value);
@@ -75,7 +91,6 @@ const AddPetForm = () => {
           },
         }
       );
-      console.log("Response:", response.data);
       if (response?.data) {
         setPetData({
           name: "",
@@ -132,6 +147,18 @@ const AddPetForm = () => {
           <option value="">Select Gender</option>
           <option value="male">Male</option>
           <option value="female">Female</option>
+        </select>
+        <label>Category:</label>
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+        >
+          <option value="">Select Category</option>
+          {category?.map((data, index) => (
+            <option key={index} value={data._id}>
+              {data.category_name}
+            </option>
+          ))}
         </select>
 
         {/* <label>Category (Object ID):</label>

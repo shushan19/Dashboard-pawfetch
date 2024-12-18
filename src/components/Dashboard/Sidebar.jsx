@@ -23,29 +23,21 @@ const Sidebar = () => {
       <h2>Pawfetch Admin</h2>
       <ul>
         <li>
-          <NavLink to="/" end activeClassName="active-link">
+          <NavLink to="/" end>
             Dashboard
           </NavLink>
         </li>
         <li>
-          <NavLink to="/pets" activeClassName="active-link">
-            Manage Pets
-          </NavLink>
+          <NavLink to="/pets">Manage Pets</NavLink>
         </li>
         <li>
-          <NavLink to="/add-pet" activeClassName="active-link">
-            Add New Pet
-          </NavLink>
+          <NavLink to="/add-pet">Add New Pet</NavLink>
         </li>
         <li>
-          <NavLink to="/adoptions" activeClassName="active-link">
-            Adoption Requests
-          </NavLink>
+          <NavLink to="/adoptions">Adoption Requests</NavLink>
         </li>
         <li>
-          <NavLink to="/users" activeClassName="active-link">
-            User Management
-          </NavLink>
+          <NavLink to="/users">User Management</NavLink>
         </li>
         {isLoggedIn && (
           <li>

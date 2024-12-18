@@ -5,6 +5,9 @@
   padding-left: 50px;
 }
 
+img {
+  max-width: 100px;
+}
 #pets h2 {
   margin-bottom: 20px;
 }

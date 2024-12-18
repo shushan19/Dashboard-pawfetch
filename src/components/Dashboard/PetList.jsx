@@ -48,6 +48,7 @@ const PetList = () => {
       <table>
         <thead>
           <tr>
+            <th>Image</th>
             <th>Name</th>
             <th>Breed</th>
             <th>Age</th>
@@ -58,6 +59,13 @@ const PetList = () => {
           {pets.length > 0 ? (
             pets.map((pet) => (
               <tr key={pet._id}>
+                <td>
+                  <img
+                    src={`${
+                      import.meta.env.VITE_BACKEND_URL
+                    }/${pet?.image?.slice(6)}`}
+                  />
+                </td>
                 <td>{pet.name}</td>
                 <td>{pet.breed}</td>
                 <td>{pet.age}</td>
