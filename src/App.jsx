@@ -34,20 +34,31 @@ const App = () => {
   const navigate = useNavigate();
 
   if (
-    ((userDetail.role === "Individual" || userDetail.role === "Organization") &&
-      window.location.href.includes("superadmindashboard")) ||
-    window.location.href.includes("individualslist") ||
+    userDetail.role !== "admin" &&
+    window.location.href.includes("superadmindashboard")
+  ) {
+    navigate("/");
+  }
+  if (
+    userDetail.role !== "admin" &&
+    window.location.href.includes("individualslist")
+  ) {
+    navigate("/");
+  }
+  if (
+    userDetail.role !== "admin" &&
     window.location.href.includes("organizationslist")
   ) {
     navigate("/");
   }
-
+  const token = localStorage.getItem("adminAuthToken");
   useEffect(() => {
-    const token = localStorage.getItem("adminAuthToken");
-    if (!token) {
-      navigate("/login");
-      return;
+    if (isLoggedIn && window.location.href.includes("/login")) {
+      navigate("/");
+      alert("ggs");
     }
+  }, []);
+  useEffect(() => {
     const fetchUserDetails = async () => {
       const token = localStorage.getItem("adminAuthToken");
       if (!token) {
@@ -98,7 +109,10 @@ const App = () => {
             path="/users"
             element={isLoggedIn ? <UserManagement /> : <Navigate to="/login" />}
           />
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/login"
+            element={!isLoggedIn ? <Login /> : <Navigate to="/" />}
+          />
           <Route
             path="/pets/edit/:id"
             element={isLoggedIn ? <EditPets /> : <Navigate to="/login" />}
