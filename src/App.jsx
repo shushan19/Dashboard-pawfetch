@@ -30,23 +30,23 @@ import OrganizationListPage from "./Pages/organizationListPage/OrganizationListP
 const App = () => {
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.loginStatus);
-  const { userDetail } = useSelector((state) => state.loginStatus);
+  const  userDetail  = useSelector((state) => state.loginStatus.userDetail);
   const navigate = useNavigate();
 
   if (
-    userDetail.role !== "admin" &&
+    userDetail?.role !== "admin" &&
     window.location.href.includes("superadmindashboard")
   ) {
     navigate("/");
   }
   if (
-    userDetail.role !== "admin" &&
+    userDetail?.role !== "admin" &&
     window.location.href.includes("individualslist")
   ) {
     navigate("/");
   }
   if (
-    userDetail.role !== "admin" &&
+    userDetail?.role !== "admin" &&
     window.location.href.includes("organizationslist")
   ) {
     navigate("/");
@@ -80,11 +80,11 @@ const App = () => {
   }, []);
   return (
     <div className="contaier">
-      <div className="admin-dashboard">
+      {isLoggedIn && <div className="admin-dashboard">
         <Sidebar />
-      </div>
+      </div>}
       <div className="main-content">
-        <Header />
+        {isLoggedIn && <Header />}
         <ToastContainer />
         <Routes>
           <Route

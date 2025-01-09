@@ -6,6 +6,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FaEye, FaPen, FaTrash } from "react-icons/fa";
 
 const PetList = () => {
   const [userId, setUserId] = useState(null);
@@ -69,10 +70,10 @@ const PetList = () => {
                 <td>{pet.name}</td>
                 <td>{pet.breed}</td>
                 <td>{pet.age}</td>
-                <td>
-                  <button onClick={() => handelNavigate(pet._id)}>View</button>
-                  <button onClick={() => handelEdit(pet._id)}>Edit</button>
-                  <button onClick={() => deletePets(pet._id)}>Delete</button>
+                <td className="actions">
+                  <button onClick={() => handelNavigate(pet._id)}><FaEye/></button>
+                  <button onClick={() => handelEdit(pet._id)}><FaPen/></button>
+                  <button onClick={() => deletePets(pet._id)}><FaTrash/></button>
                 </td>
               </tr>
             ))

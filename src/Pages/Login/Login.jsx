@@ -5,6 +5,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setLoggedIn, setUserDetail } from "../../store/slice/loginStatusSlice";
 import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const Login = () => {
     } catch (error) {
       if (error.response && error.response.data) {
         setMessage(
-          error.response.data.message || "An error occurred during login"
+          error.response.data.msg || "An error occurred during login"
         );
       } else {
         setMessage("An error occurred. Please try again.");
@@ -57,43 +58,41 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
-      <form className="login-form" onSubmit={handleSubmit}>
-        <label>Email:</label>
-        <input
-          type="email"
-          name="email"
-          placeholder="Enter your email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-
-        <label>Password:</label>
-        <div className="password-container">
+    <div className="login-containers">
+      <div className="login-contents">
+        <h2>Login</h2>
+        <form className="login-form" onSubmit={handleSubmit}>
+          <label>Email:</label>
           <input
-            type={passwordVisible ? "text" : "password"}
-            name="password"
-            placeholder="Enter your password"
-            value={formData.password}
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            value={formData.email}
             onChange={handleChange}
             required
           />
-          <button
-            type="button"
-            onClick={togglePasswordVisibility}
-            className="toggle-password"
-          >
-            {passwordVisible ? "Hide" : "Show"}
-          </button>
-        </div>
 
-        <button type="submit" className="login-button">
-          Login
-        </button>
-      </form>
-      {message && <p> Error:{message}</p>}
+          <label>Password:</label>
+          <div className="password-container">
+            <input
+              type={passwordVisible ? "text" : "password"}
+              name="password"
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            <div onClick={togglePasswordVisibility} className="toggle-password">
+              {passwordVisible ? <FaEye/>:<FaEyeSlash/>}
+            </div>
+          </div>
+
+          <button type="submit" className="login-button">
+            Login
+          </button>
+        </form>
+        {message && <p style={{ color:'red' }}> Error:{message}</p>}
+      </div>
     </div>
   );
 };

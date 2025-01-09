@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-// import './OrganizationListPage.css'; // Make sure to create or update this CSS file
-import AddOrganizationForm from '../../components/AddOrganizationForm'; // Import the new organization form component
+import AddOrganizationForm from '../../components/AddOrganizationForm'; 
+import DeleteConfirmationModal from './DeleteConfirmationModal'; 
+import { toast } from 'react-toastify';
 
 const OrganizationListPage = () => {
   const [organizations, setOrganizations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false); 
+  const [organizationToDelete, setOrganizationToDelete] = useState(null); 
 
-  // Fetch the list of organizations from the backend
   const fetchOrganizations = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/getallorganizations`);
@@ -22,44 +24,44 @@ const OrganizationListPage = () => {
     }
   };
 
-  // Open the modal to add a new organization
   const openModal = () => {
     setShowModal(true);
   };
 
-  // Close the modal
   const closeModal = () => {
     setShowModal(false);
   };
 
-  // Fetch the list when the component mounts
   useEffect(() => {
     fetchOrganizations();
   }, []);
 
-  // Delete an organization
-  const deleteOrganization = async (id) => {
-    // console.log("Deleting organization with ID:", orgId); 
-    // return
-    // Display confirmation dialog before proceeding with deletion
-    const confirmed = window.confirm('Are you sure you want to delete this organization?');
-  
-    if (confirmed) {
-      try {
-        const response = await axios.delete(
-          `${import.meta.env.VITE_BACKEND_URL}/deleteorganization/${id}`
-        );
-  
-        if (response.status === 200) {
-          alert('Organization deleted successfully');
-          fetchOrganizations(); // Refresh the list of organizations
-        }
-      } catch (err) {
-        // console.error('Error deleting organization:', err);
-        alert('An error occurred while deleting the organization');
+  const openDeleteModal = (organization) => {
+    setOrganizationToDelete(organization);
+    setShowDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+    setOrganizationToDelete(null);
+  };
+
+  const deleteOrganization = async () => {
+    if (!organizationToDelete) return;
+
+    try {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/deleteorganization/${organizationToDelete._id}`
+      );
+
+      if (response.status === 200) {
+        toast.success('Organization deleted successfully');
+        fetchOrganizations(); 
       }
-    } else {
-      console.log('Organization deletion cancelled');
+    } catch (err) {
+      toast.error('An error occurred while deleting the organization');
+    } finally {
+      closeDeleteModal();
     }
   };
 
@@ -67,19 +69,16 @@ const OrganizationListPage = () => {
     <div className="organization-list">
       <h1>Organization List</h1>
 
-      {/* Add Organization Button */}
       <button className="btn btn-primary" onClick={openModal}>
         Add Organization
       </button>
 
-      {/* Modal for Adding Organization */}
       <AddOrganizationForm
         showModal={showModal}
         closeModal={closeModal}
-        refreshList={fetchOrganizations} // Pass fetchOrganizations to refresh the list after adding
+        refreshList={fetchOrganizations} 
       />
 
-      {/* Organizations Table */}
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -104,7 +103,7 @@ const OrganizationListPage = () => {
                 <td>{organization.licenseNumber}</td>
                 <td>
                   <button
-                    onClick={() => deleteOrganization(organization._id)}
+                    onClick={() => openDeleteModal(organization)} 
                     className="btn btn-danger"
                   >
                     Delete
@@ -115,6 +114,13 @@ const OrganizationListPage = () => {
           </tbody>
         </table>
       )}
+
+      <DeleteConfirmationModal
+        showModal={showDeleteModal}
+        closeModal={closeDeleteModal}
+        onConfirm={deleteOrganization} 
+        organizationName={organizationToDelete ? organizationToDelete.orgName : ''}
+      />
     </div>
   );
 };

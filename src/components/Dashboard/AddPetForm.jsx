@@ -111,8 +111,8 @@ const AddPetForm = () => {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      console.log(error.response)
     }
-    console.log(formData);
   };
 
   return (
@@ -120,20 +120,20 @@ const AddPetForm = () => {
       <h2>Add New Pet</h2>
       <form onSubmit={handleSubmit}>
         <label>Name:</label>
-        <input
+        <input required
           type="text"
           value={petData.name}
           onChange={(e) => setPetData({ ...petData, name: e.target.value })}
         />
 
         <label>Image:</label>
-        <input type="file" accept="image/*" onChange={handleImageChange} />
+        <input required type="file" accept="image/*" onChange={handleImageChange} />
         {imagePreview && (
           <img src={imagePreview} alt="Preview" className="image-preview" />
         )}
 
         <label>Age:</label>
-        <input
+        <input required
           type="number"
           value={petData.age}
           onChange={(e) => setPetData({ ...petData, age: e.target.value })}
@@ -162,28 +162,28 @@ const AddPetForm = () => {
         </select>
 
         {/* <label>Category (Object ID):</label>
-        <input
+        <input required
           type="text"
           value={petData.category}
           onChange={(e) => setPetData({ ...petData, category: e.target.value })}
         /> */}
 
         <label>Address:</label>
-        <input
+        <input required
           type="text"
           value={petData.address}
           onChange={(e) => setPetData({ ...petData, address: e.target.value })}
         />
 
         {/* <label>Owner (Object ID):</label>
-        <input
+        <input required
           type="text"
           value={petData.owner}
           onChange={(e) => setPetData({ ...petData, owner: e.target.value })}
         /> */}
 
         <label>Vaccination Status:</label>
-        <input
+        <input required
           type="text"
           value={petData.vaccination_status}
           onChange={(e) =>
@@ -195,7 +195,7 @@ const AddPetForm = () => {
         />
 
         <label>Health Issue:</label>
-        <input
+        <input required
           type="text"
           value={petData.health_issue}
           onChange={(e) =>
@@ -204,7 +204,7 @@ const AddPetForm = () => {
         />
 
         <label>Medication:</label>
-        <input
+        <input required
           type="text"
           value={petData.medication}
           onChange={(e) =>
@@ -213,7 +213,7 @@ const AddPetForm = () => {
         />
 
         <label>Breed:</label>
-        <input
+        <input required
           type="text"
           value={petData.breed}
           onChange={(e) => setPetData({ ...petData, breed: e.target.value })}

@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-// import AddUserModal from './AddUserModal'; // Import the modal component
 import './IndividualListPage.css';
 import AddIndividualForm from '../../components/AddIndividualForm';
+import DeleteConfirmationModal from '../organizationListPage/DeleteConfirmationModal';  // Import the DeleteConfirmationModal
+import { toast } from 'react-toastify';
 
 const IndividualListPage = () => {
   const [individuals, setIndividuals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);  // Store the user to delete
 
-  // Fetch the list of individual users from the backend
+  // Fetch all individuals
   const fetchIndividuals = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/getallindividuals`);
-      setIndividuals(response.data);
+      setIndividuals(response?.data);
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -23,51 +26,59 @@ const IndividualListPage = () => {
     }
   };
 
-  // Open the modal
+  // Open modal to add user
   const openModal = () => {
     setShowModal(true);
   };
 
-  // Close the modal
+  // Close modal
   const closeModal = () => {
     setShowModal(false);
   };
 
-  // Fetch the list when the component mounts
+  // Fetch individuals on component mount
   useEffect(() => {
     fetchIndividuals();
   }, []);
 
+  // Delete individual user
   const deleteUser = async (userId) => {
-    // Display confirmation dialog before proceeding with deletion
-    const confirmed = window.confirm('Are you sure you want to delete this user?');
-  
-    if (confirmed) {
-      try {
-        const response = await axios.delete(
-          `${import.meta.env.VITE_BACKEND_URL}/deleteindividual/${userId}`
-        );
-  
-        if (response.status === 200) {
-          alert('User deleted successfully');
-          fetchIndividuals(); // Refresh the list of individuals
-        }
-      } catch (err) {
-        console.error('Error deleting user:', err);
-        alert('An error occurred while deleting the user');
+    if (!userId) return;
+
+    try {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/deleteindividual/${userId}`
+      );
+
+      if (response.status === 200) {
+        toast.success('User deleted successfully');
+        fetchIndividuals(); // Refresh the list of individuals
       }
-    } else {
-      console.log('User deletion cancelled');
+    } catch (err) {
+      toast.error('An error occurred while deleting the user');
+    } finally {
+      closeDeleteModal(); // Close the modal after deletion
     }
   };
-  
+
+  // Open delete confirmation modal
+  const openDeleteModal = (user) => {
+    setUserToDelete(user);  // Set the user to delete
+    setShowDeleteModal(true); // Show the delete confirmation modal
+  };
+
+  // Close delete confirmation modal
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+    setUserToDelete(null);  // Clear the user to delete
+  };
 
   return (
     <div className="individual-users-list">
       <h1>Individual Users List</h1>
 
       {/* Add User Button */}
-      <button className="btn btn-primary " onClick={openModal}>
+      <button className="btn btn-primary" onClick={openModal}>
         Add User
       </button>
 
@@ -75,7 +86,7 @@ const IndividualListPage = () => {
       <AddIndividualForm
         showModal={showModal}
         closeModal={closeModal}
-        refreshList={fetchIndividuals} // Pass fetchIndividuals function to refresh the list
+        refreshList={fetchIndividuals}  // Pass fetchIndividuals function to refresh the list
       />
 
       {/* Users Table */}
@@ -103,17 +114,25 @@ const IndividualListPage = () => {
                 <td>{individual.phone}</td>
                 <td>
                   <button
-                    onClick={() => deleteUser(individual.userId._id)}
+                    onClick={() => openDeleteModal(individual)}  // Open the delete modal with the user
                     className="btn btn-danger"
                   >
                     Delete
                   </button>
-                </td>	
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmationModal
+        showModal={showDeleteModal}
+        closeModal={closeDeleteModal}
+        onConfirm={() => deleteUser(userToDelete?.userId._id)}  // Pass the correct userId for deletion
+        organizationName={userToDelete ? userToDelete.fullName : ''}  // Show user's full name in the modal
+      />
     </div>
   );
 };

@@ -1,0 +1,15 @@
+.modal-overlay{
+    .modal-content{
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        .modal-buttons{
+            display: flex;
+            justify-content: center;
+            gap:20px;
+        }
+    }
+}
+.organization-list{
+    margin-top: 100px;
+}
