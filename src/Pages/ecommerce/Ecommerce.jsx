@@ -10,10 +10,10 @@ const Ecommerce = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/products`
+          `${import.meta.env.VITE_BACKEND_URL}/get-all-products`
         ); // Replace with your actual API endpoint
         if (response.data.success) {
-          setProducts(response.data.products); // Assuming the API returns `products` array
+          setProducts(response.data.data); // Assuming the API returns `products` array
         } else {
           console.error("Failed to fetch products");
         }
@@ -33,32 +33,33 @@ const Ecommerce = () => {
         <thead>
           <tr>
             <th>S.N</th>
+            <th>Image</th>
             <th>Name</th>
             <th>Description</th>
             <th>Price</th>
             <th>Stock</th>
             <th>Category</th>
-            <th>Image</th>
             <th>Active</th>
           </tr>
         </thead>
         <tbody>
-          {products.length > 0 ? (
+          {products?.length > 0 ? (
             products.map((product, index) => (
               <tr key={product._id}>
                 <td>{index + 1}</td>
-                <td>{product.name}</td>
-                <td>{product.description}</td>
-                <td>${product.price}</td>
-                <td>{product.stock}</td>
-                <td>{product.category?.category_name || "N/A"}</td>
                 <td>
                   <img
-                    src={product.image}
-                    alt={product.name}
-                    className="product-image"
+                    src={`${import.meta.env.VITE_BACKEND_URL
+                      }/${product?.image?.slice(6)}`}
+                    alt=""
+                    className="rounded-3xl"
                   />
                 </td>
+                <td>{product.name}</td>
+                <td>{product.description}</td>
+                <td>Rs.{product.price}</td>
+                <td>{product.stock}</td>
+                <td>{product.category?.category_name || "N/A"}</td>
                 <td>{product.isActive ? "Yes" : "No"}</td>
               </tr>
             ))

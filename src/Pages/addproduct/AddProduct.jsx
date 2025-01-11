@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
+  const navigate = useNavigate();
   const [productData, setProductData] = useState({
     name: "",
     description: "",
@@ -50,11 +52,22 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // console.log(productData)
 
     const formData = new FormData();
-    for (const key in productData) {
-      formData.append(key, productData[key]);
-    }
+    console.log(productData)
+    formData.append('name',productData.name);
+    formData.append('description',productData.description)
+    formData.append('price',productData.price)
+    formData.append('stock',productData.stock)
+    formData.append('category',productData.category)
+    formData.append('isActive',productData.isActive)
+    formData.append('image',productData.image)
+    console.log(formData.name)
+
+    formData.forEach((value, key) => {
+      console.log(key, value);
+    });
 
     try {
       const response = await axios.post(
@@ -78,6 +91,7 @@ const AddProduct = () => {
           image: null,
           isActive: true,
         });
+        navigate('/ecommerce')
       } else {
         toast.error("Failed to add product");
       }
