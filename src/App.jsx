@@ -30,6 +30,8 @@ import Breed from "./Pages/breed/Breed";
 import Category from "./Pages/category/Category";
 import AddBreed from "./Pages/addbreed/AddBreed";
 import AddCategory from "./Pages/addcategory/AddCategory";
+import Ecommerce from "./Pages/ecommerce/Ecommerce";
+import AddProduct from "./Pages/addproduct/AddProduct";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -137,6 +139,8 @@ const App = () => {
           <Route path="/add-breed" element={<AddBreed />} />
           <Route path="/add-category" element={<AddCategory />} />
           <Route path="/category" element={<Category />} />
+          <Route path='/ecommerce' element={<Ecommerce/>}/>
+          <Route path='/add-product' element={<AddProduct/>}/>
         </Routes>
       </div>
     </div>
