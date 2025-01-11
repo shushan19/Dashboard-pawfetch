@@ -26,11 +26,15 @@ import EditPets from "./Pages/edit/EditPets";
 import SuperAdminDashboard from "./Pages/superAdmin/SuperAdminDashboard";
 import IndividualListPage from "./Pages/individualListPage/IndividualListPage";
 import OrganizationListPage from "./Pages/organizationListPage/OrganizationListPage";
+import Breed from "./Pages/breed/Breed";
+import Category from "./Pages/category/Category";
+import AddBreed from "./Pages/addbreed/AddBreed";
+import AddCategory from "./Pages/addcategory/AddCategory";
 
 const App = () => {
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.loginStatus);
-  const  userDetail  = useSelector((state) => state.loginStatus.userDetail);
+  const userDetail = useSelector((state) => state.loginStatus.userDetail);
   const navigate = useNavigate();
 
   if (
@@ -80,9 +84,11 @@ const App = () => {
   }, []);
   return (
     <div className="contaier">
-      {isLoggedIn && <div className="admin-dashboard">
-        <Sidebar />
-      </div>}
+      {isLoggedIn && (
+        <div className="admin-dashboard">
+          <Sidebar />
+        </div>
+      )}
       <div className="main-content">
         {isLoggedIn && <Header />}
         <ToastContainer />
@@ -127,6 +133,10 @@ const App = () => {
           />
           <Route path="/individualslist" element={<IndividualListPage />} />
           <Route path="/organizationslist" element={<OrganizationListPage />} />
+          <Route path="/breed" element={<Breed />} />
+          <Route path="/add-breed" element={<AddBreed />} />
+          <Route path="/add-category" element={<AddCategory />} />
+          <Route path="/category" element={<Category />} />
         </Routes>
       </div>
     </div>

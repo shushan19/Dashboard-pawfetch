@@ -9,7 +9,9 @@ const AddPetForm = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.loginStatus.userDetail);
   const [category, setCategory] = useState(null);
+  const [breed, setBreed] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedBreed, setSelectedBreed] = useState("");
 
   useEffect(() => {
     const fetchAllCategory = async () => {
@@ -22,6 +24,17 @@ const AddPetForm = () => {
         toast.error("Error fetch categories");
       }
     };
+    const fetchAllBreed = async () => {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/getallbreed`
+      );
+      if (response.status === 200) {
+        setBreed(response.data);
+      } else {
+        toast.error("Error fetch categories");
+      }
+    };
+    fetchAllBreed();
     fetchAllCategory();
   }, []);
 
@@ -36,7 +49,6 @@ const AddPetForm = () => {
     vaccination_status: "",
     health_issue: "",
     medication: "",
-    breed: "",
     description: "",
   });
   useEffect(() => {
@@ -72,7 +84,7 @@ const AddPetForm = () => {
     formData.append("vaccination_status", petData?.vaccination_status);
     formData.append("health_issue", petData?.health_issue);
     formData.append("medication", petData?.medication);
-    formData.append("breed", petData?.breed);
+    formData.append("breed", selectedBreed);
     formData.append("description", petData?.description);
     formData.append("owner", user._id);
 
@@ -103,7 +115,6 @@ const AddPetForm = () => {
           vaccination_status: "",
           health_issue: "",
           medication: "",
-          breed: "",
           description: "",
         });
         toast.success("Pet added success");
@@ -111,7 +122,7 @@ const AddPetForm = () => {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      console.log(error.response)
+      console.log(error.response);
     }
   };
 
@@ -120,20 +131,27 @@ const AddPetForm = () => {
       <h2>Add New Pet</h2>
       <form onSubmit={handleSubmit}>
         <label>Name:</label>
-        <input required
+        <input
+          required
           type="text"
           value={petData.name}
           onChange={(e) => setPetData({ ...petData, name: e.target.value })}
         />
 
         <label>Image:</label>
-        <input required type="file" accept="image/*" onChange={handleImageChange} />
+        <input
+          required
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+        />
         {imagePreview && (
           <img src={imagePreview} alt="Preview" className="image-preview" />
         )}
 
         <label>Age:</label>
-        <input required
+        <input
+          required
           type="number"
           value={petData.age}
           onChange={(e) => setPetData({ ...petData, age: e.target.value })}
@@ -169,7 +187,8 @@ const AddPetForm = () => {
         /> */}
 
         <label>Address:</label>
-        <input required
+        <input
+          required
           type="text"
           value={petData.address}
           onChange={(e) => setPetData({ ...petData, address: e.target.value })}
@@ -183,7 +202,8 @@ const AddPetForm = () => {
         /> */}
 
         <label>Vaccination Status:</label>
-        <input required
+        <input
+          required
           type="text"
           value={petData.vaccination_status}
           onChange={(e) =>
@@ -195,7 +215,8 @@ const AddPetForm = () => {
         />
 
         <label>Health Issue:</label>
-        <input required
+        <input
+          required
           type="text"
           value={petData.health_issue}
           onChange={(e) =>
@@ -204,20 +225,26 @@ const AddPetForm = () => {
         />
 
         <label>Medication:</label>
-        <input required
+        <input
+          required
           type="text"
           value={petData.medication}
           onChange={(e) =>
             setPetData({ ...petData, medication: e.target.value })
           }
         />
-
-        <label>Breed:</label>
-        <input required
-          type="text"
-          value={petData.breed}
-          onChange={(e) => setPetData({ ...petData, breed: e.target.value })}
-        />
+        <label>Category:</label>
+        <select
+          value={selectedBreed}
+          onChange={(e) => setSelectedBreed(e.target.value)}
+        >
+          <option value="">Select Breed</option>
+          {breed?.map((data, index) => (
+            <option key={index} value={data.breed_name}>
+              {data?.breed_name}
+            </option>
+          ))}
+        </select>
 
         <label>Description:</label>
         <textarea

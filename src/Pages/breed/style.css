@@ -1,0 +1,44 @@
+.breed-table-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 30vh;
+  a {
+    background-color: #ff5961;
+    text-decoration: none;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 5px;
+    float: right;
+  }
+}
+
+.breed-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.breed-table th,
+.breed-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.breed-table th {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+.breed-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.breed-table tr:hover {
+  background-color: #f1f1f1;
+}

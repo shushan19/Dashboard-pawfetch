@@ -10,7 +10,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.loginStatus);
-  const role   = useSelector(state=>state.loginStatus.userDetail?.role);
+  const role = useSelector((state) => state.loginStatus.userDetail?.role);
   const handelLogout = () => {
     localStorage.removeItem("adminAuthToken");
     dispatch(setLoggedIn(false));
@@ -40,14 +40,25 @@ const Sidebar = () => {
         <li>
           <NavLink to="/users">User Management</NavLink>
         </li>
-        {role==='admin'&&<>
-          <li>
-            <NavLink to="/individualslist">Individual List</NavLink>
-          </li>
-          <li>
-            <NavLink to="/organizationslist">Organization List</NavLink>
-          </li>
-        </>}
+        {role === "admin" && (
+          <>
+            <li>
+              <NavLink to="/individualslist">Individual List</NavLink>
+            </li>
+            <li>
+              <NavLink to="/organizationslist">Organization List</NavLink>
+            </li>
+            <li>
+              <NavLink to="/ecommerce">Pet Shop</NavLink>
+            </li>
+            <li>
+              <NavLink to="/category">Category</NavLink>
+            </li>
+            <li>
+              <NavLink to="/breed">Breeds</NavLink>
+            </li>
+          </>
+        )}
         {isLoggedIn && (
           <li>
             <button onClick={handelLogout}>Log Out!</button>

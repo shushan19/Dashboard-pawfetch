@@ -1,0 +1,53 @@
+.category-table-container {
+  margin: 20px;
+  margin-top: 30vh;
+  a {
+    background-color: #ff5961;
+    text-decoration: none;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 5px;
+    float: right;
+  }
+}
+.category-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.category-table th,
+.category-table td {
+  padding: 10px;
+  text-align: left;
+}
+
+.category-table th {
+  background-color: #f1f1f1;
+}
+
+.category-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.category-table td {
+  border-bottom: 1px solid #ddd;
+}
+
+.category-table .delete-button {
+  cursor: pointer;
+  color: red;
+}
+
+.category-table .delete-button:hover {
+  color: darkred;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
