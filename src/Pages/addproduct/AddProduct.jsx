@@ -13,8 +13,13 @@ const AddProduct = () => {
     category: "",
     image: null, // For file upload
     isActive: true,
+    type: "",
   });
-
+  const types = [
+    { name: "Food", value: "food" },
+    { name: "Toys", value: "toys" },
+    { name: "Accessories", value: "accessories" },
+  ];
   const [categories, setCategories] = useState([]);
 
   // Fetch categories on component mount
@@ -25,7 +30,7 @@ const AddProduct = () => {
           `${import.meta.env.VITE_BACKEND_URL}/getallcategory`
         );
         console.log(response)
-        if (response.status===200) {
+        if (response.status === 200) {
           setCategories(response.data);
         } else {
           toast.error("Failed to fetch categories");
@@ -52,22 +57,18 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(productData)
+    console.log(productData)
 
     const formData = new FormData();
     console.log(productData)
-    formData.append('name',productData.name);
-    formData.append('description',productData.description)
-    formData.append('price',productData.price)
-    formData.append('stock',productData.stock)
-    formData.append('category',productData.category)
-    formData.append('isActive',productData.isActive)
-    formData.append('image',productData.image)
-    console.log(formData.name)
-
-    formData.forEach((value, key) => {
-      console.log(key, value);
-    });
+    formData.append('name', productData.name);
+    formData.append('description', productData.description)
+    formData.append('price', productData.price)
+    formData.append('stock', productData.stock)
+    formData.append('category', productData.category)
+    formData.append('isActive', productData.isActive)
+    formData.append('image', productData.image)
+    formData.append('type', productData.type)
 
     try {
       const response = await axios.post(
@@ -97,7 +98,6 @@ const AddProduct = () => {
       }
     } catch (error) {
       toast.error("Error adding product. Please try again.");
-      console.log(error.response)
     }
   };
 
@@ -161,6 +161,23 @@ const AddProduct = () => {
             {categories?.map((category) => (
               <option key={category._id} value={category._id}>
                 {category.category_name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="type">Type</label>
+          <select
+            id="type"
+            name="type"
+            value={productData.type}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="">Select a type</option>
+            {types?.map((type) => (
+              <option key={type.name} value={type.value}>
+                {type.name}
               </option>
             ))}
           </select>
