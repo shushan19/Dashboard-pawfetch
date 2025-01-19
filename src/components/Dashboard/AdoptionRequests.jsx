@@ -20,22 +20,29 @@ const AdoptionRequests = () => {
   }, [userDetail?._id]);
 
   const deletePets = async (id) => {
-    try{
+    try {
       const response = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/pet/${id}`);
-      if(response.status === 200){
+      if (response.status === 200) {
         const response = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/adoption-form/${id}`)
-        console.log(response)
-        if(response.status === 200){
+        if (response.status === 200) {
           toast.success(response.data.message);
           fetchAllRequest();
         }
       }
-    }catch(error){
+    } catch (error) {
       toast.success("Something Went Wrong!!");
       console.log(error)
-    }    
+    }
   };
-
+  const handleReject = async (id) => {
+    try {
+      const response = await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/adoption-form/${id}`);
+      console.log(response)
+    } catch (error) {
+      toast.error("Something went wrong!!")
+      console.log(error.response)
+    }
+  }
   return (
     <div id="adoptions">
       <h2>Adoption Requests</h2>
@@ -43,6 +50,8 @@ const AdoptionRequests = () => {
         <thead>
           <tr>
             <th>User</th>
+            <th>User Phone</th>
+            <th>User Email</th>
             <th>Pet Name</th>
             <th>Image</th>
             <th>Actions</th>
@@ -54,6 +63,8 @@ const AdoptionRequests = () => {
               request?.map((request) => (
                 <tr key={request?._id}>
                   <td>{request?.fullName}</td>
+                  <td>{request?.phoneNumber}</td>
+                  <td>{request?.email}</td>
                   <td>{request?.currentPets[0]?.name}</td>
                   <td>
                     <img
@@ -64,8 +75,8 @@ const AdoptionRequests = () => {
                     />
                   </td>
                   <td>
-                    <button onClick={()=>deletePets(request?.petId)}>Approve</button>
-                    <button>Decline</button>
+                    <button onClick={() => deletePets(request?.petId)}>Approve</button>
+                    <button onClick={() => handleReject(userDetail?._id)}>Decline</button>
                   </td>
                 </tr>
               ))
