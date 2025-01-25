@@ -13,6 +13,7 @@ const AdoptionRequests = () => {
       `${import.meta.env.VITE_BACKEND_URL}/getAllFormRequest`,
       { userId: userDetail?._id }
     );
+    console.log(response.data.data)
     setRequest(response.data.data);
   };
   useEffect(() => {
@@ -34,98 +35,110 @@ const AdoptionRequests = () => {
   //     console.log(error)
   //   }
   // };
-  
+
   const handleApprove = async (request) => {
     try {
-      // First delete the pet (your existing logic)
-      const petResponse = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/pet/${request.petId}`);
-      
-      if (petResponse.status === 200) {
-        // Then delete the adoption form (your existing logic)
-        const formResponse = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/adoption-form/${request.petId}`);
-        
-        if (formResponse.status === 200) {
-          // Finally send approval emails
-          const emailResponse = await axios.post(
-            `${import.meta.env.VITE_BACKEND_URL}/handle-adoption-response`,
-            {
-              applicationId: request._id,
-              status: 'approved',
-              ownerId: userDetail._id,
-              petDetails: request.currentPets[0],
-              applicantDetails: {
-                fullName: request.fullName,
-                email: request.email,
-                phoneNumber: request.phoneNumber
-              }
-            }
-          );
-
-          if (emailResponse.status === 200) {
-            toast.success(formResponse.data.message);
-            fetchAllRequest();
-          }
-        }
-      }
-    } catch (error) {
-      toast.error("Something Went Wrong!!");
-      console.error(error);
-    }
-  };
-
-  // const handleReject = async (id) => {
-  //   try {
-  //     const response = await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/adoption-form/${id}`);
-  //     console.log(response)
-  //   } catch (error) {
-  //     toast.error("Something went wrong!!")
-  //     console.log(error.response)
-  //   }
-  // }
-
-  const handleReject = async (request) => {
-    try {
-      // First update the form status (your existing logic)
-      const formResponse = await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/adoption-form/${request._id}`,
-        {status: 'declined'}
-      );
-      
-      if (formResponse.status === 200) {
-        // Then send rejection email
-        const emailResponse = await axios.post(
-          `${import.meta.env.VITE_BACKEND_URL}/handle-adoption-response`,
-          {
-            applicationId: request._id,
-            status: 'declined',
-            ownerId: userDetail._id,
-            petDetails: request.currentPets[0],
-            applicantDetails: {
-              fullName: request.fullName,
-              email: request.email,
-              phoneNumber: request.phoneNumber
-            }
-          }
-        );
-
-        if (emailResponse.status === 200) {
-          toast.success("Application declined and applicant notified");
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/pets/${request?.petId?._id}`);
+      if (response.status === 200) {
+        const response = await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/adoption-form/${request.userId}`, { status: 'Accept' });
+        console.log(response)
+        if (response.status === 200) {
+          toast.success('Adoptions request Accepted Successfully')
           fetchAllRequest();
         }
       }
     } catch (error) {
-      toast.error("Something went wrong!!");
-      console.error(error);
+      console.log(error.response)
     }
+
+    // try {
+    //   // First delete the pet (your existing logic)
+    //   const petResponse = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/pet/${request.petId}`);
+
+    //   if (petResponse.status === 200) {
+    //     // Then delete the adoption form (your existing logic)
+    //     const formResponse = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/adoption-form/${request.petId}`);
+
+    //     if (formResponse.status === 200) {
+    //       // Finally send approval emails
+    //       console.log(response)
+    //       const emailResponse = await axios.post(
+    //         `${import.meta.env.VITE_BACKEND_URL}/handle-adoption-response`,
+    //         {
+    //           applicationId: request._id,
+    //           status: 'approved',
+    //           ownerId: userDetail._id,
+    //           petDetails: request.currentPets[0],
+    //           applicantDetails: {
+    //             fullName: request.fullName,
+    //             email: request.email,
+    //             phoneNumber: request.phoneNumber
+    //           }
+    //         }
+    //       );
+
+    //       if (emailResponse.status === 200) {
+    //         toast.success(formResponse.data.message);
+    //         fetchAllRequest();
+    //       }
+    //     }
+    //   }
+    // } catch (error) {
+    //   toast.error("Something Went Wrong!!");
+    //   console.error(error);
+    // }
   };
-//   catch (error) {
-//     console.error('Error details:', {
-//       message: error.message,
-//       response: error.response?.data,
-//       status: error.response?.status
-//     });
-//     toast.error(error.response?.data?.message || "Something went wrong!");
-//   }
-// };
+
+  const handleReject = async (id) => {
+    try {
+      const response = await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/adoption-form/${id}`, { status: 'Reject' });
+      console.log(response)
+      if (response.status === 200) {
+        toast.success("Application declined and applicant notified");
+        fetchAllRequest();
+        // Send rejection email to individual
+      }
+    } catch (error) {
+      toast.error("Something went wrong!!")
+      console.log(error.response)
+    }
+  }
+
+  // const handleReject = async (request) => {
+  //   console.log(request)
+  //   try {
+  //     // First update the form status (your existing logic)
+  //     const formResponse = await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/adoption-form/${request}`,
+  //       { status: 'declined' }
+  //     );
+
+  //     if (formResponse.status === 200) {
+  //       // Then send rejection email
+  //       const emailResponse = await axios.post(
+  //         `${import.meta.env.VITE_BACKEND_URL}/handle-adoption-response`,
+  //         {
+  //           applicationId: request._id,
+  //           status: 'declined',
+  //           ownerId: userDetail._id,
+  //           petDetails: request.currentPets[0],
+  //           applicantDetails: {
+  //             fullName: request.fullName,
+  //             email: request.email,
+  //             phoneNumber: request.phoneNumber
+  //           }
+  //         }
+  //       );
+
+  //       if (emailResponse.status === 200) {
+  //         toast.success("Application declined and applicant notified");
+  //         fetchAllRequest();
+  //       }
+  //     }
+  //   } catch (error) {
+  //     toast.error("Something went wrong!!");
+  //     console.error(error);
+  //   }
+  // };
 
   return (
     <div id="adoptions">
@@ -144,27 +157,28 @@ const AdoptionRequests = () => {
         <tbody>
           {
             request?.length > 0 && (
-              request?.map((request) => (
-                <tr key={request?._id}>
-                  <td>{request?.fullName}</td>
-                  <td>{request?.phoneNumber}</td>
-                  <td>{request?.email}</td>
-                  <td>{request?.currentPets[0]?.name}</td>
-                  <td>
-                    <img
-                      src={`${import.meta.env.VITE_BACKEND_URL
-                        }/${request?.currentPets[0]?.image?.slice(6)}`}
-                      alt=""
-                      className="rounded-3xl"
-                    />
-                  </td>
-                  <td>
-                  <button onClick={() => handleApprove(request)}>Approve</button>
-                    {/* <button onClick={() => deletePets(request?.petId)}>Approve</button> */}
-                    <button onClick={() => handleReject(userDetail?._id)}>Decline</button>
-                  </td>
-                </tr>
-              ))
+              request?.map((request) => {
+                if (request.status !== 'Reject' && request.status !== 'Accept' && request?.petId?.petStatus !== false)
+                  return <tr key={request?._id}>
+                    <td>{request?.fullName}</td>
+                    <td>{request?.phoneNumber}</td>
+                    <td>{request?.email}</td>
+                    <td>{request?.currentPets[0]?.name}</td>
+                    <td>
+                      <img
+                        src={`${import.meta.env.VITE_BACKEND_URL
+                          }/${request?.currentPets[0]?.image?.slice(6)}`}
+                        alt=""
+                        className="rounded-3xl"
+                      />
+                    </td>
+                    <td>
+                      <button onClick={() => handleApprove(request)}>Approve</button>
+                      {/* <button onClick={() => deletePets(request?.petId)}>Approve</button> */}
+                      <button onClick={() => handleReject(request?.userId)}>Decline</button>
+                    </td>
+                  </tr>
+              })
             )
           }
         </tbody>

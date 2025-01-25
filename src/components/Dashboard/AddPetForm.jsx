@@ -8,56 +8,84 @@ import { useNavigate } from "react-router-dom";
 const AddPetForm = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.loginStatus.userDetail);
-  const [category, setCategory] = useState(null);
-  const [breed, setBreed] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedBreed, setSelectedBreed] = useState("");
+  const [categories, setCategories] = useState([]); // State for categories
+  const [breeds, setBreeds] = useState([]); // Initialize breeds as an empty array
+  const [selectedCategory, setSelectedCategory] = useState(""); // Selected category
+  const [selectedBreed, setSelectedBreed] = useState(""); // Selected breed
 
+  // Fetch all categories
   useEffect(() => {
     const fetchAllCategory = async () => {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/getallcategory`
-      );
-      if (response.status === 200) {
-        setCategory(response.data);
-      } else {
-        toast.error("Error fetch categories");
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/getallcategory`
+        );
+        if (response.status === 200) {
+          setCategories(response.data);
+        } else {
+          toast.error("Error fetching categories");
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        toast.error("Failed to fetch categories");
       }
     };
-    const fetchAllBreed = async () => {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/getallbreed`
-      );
-      if (response.status === 200) {
-        setBreed(response.data);
-      } else {
-        toast.error("Error fetch categories");
-      }
-    };
-    fetchAllBreed();
+
     fetchAllCategory();
   }, []);
 
+  // Fetch breeds based on selected category
+  useEffect(() => {
+    const fetchBreedsByCategory = async () => {
+      if (selectedCategory) {
+        try {
+          const response = await axios.get(
+            `${import.meta.env.VITE_BACKEND_URL}/breeds-by-category/${selectedCategory}`
+          );
+          if (response.status === 200) {
+            setBreeds(response.data.data);
+          } else {
+            toast.error("Error fetching breeds");
+          }
+        } catch (error) {
+          console.error("Error fetching breeds:", error);
+          toast.error("Failed to fetch breeds");
+        }
+      } else {
+        setBreeds([]); // Clear breeds if no category is selected
+      }
+    };
+
+    fetchBreedsByCategory();
+  }, [selectedCategory]);
+
+  // Pet form data
   const [petData, setPetData] = useState({
     name: "",
     image: "",
     age: "",
     gender: "",
-    category: "6741d01f1c6ee898cd745d64",
+    category: "",
     address: "",
-    owner: `${user?._id}`,
+    owner: user?._id || "",
     vaccination_status: "",
     health_issue: "",
     medication: "",
+    breed: "",
     description: "",
   });
+
+  // Update owner ID in petData when user changes
   useEffect(() => {
     if (user?._id) {
       setPetData((prev) => ({ ...prev, owner: user._id }));
     }
   }, [user?._id]);
+
+  // Image preview state
   const [imagePreview, setImagePreview] = useState("");
 
+  // Handle image file change
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -70,27 +98,25 @@ const AddPetForm = () => {
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
 
-    formData.append("name", petData?.name);
-    formData.append("image", petData?.image);
-    formData.append("age", petData?.age);
-    formData.append("gender", petData?.gender);
-    formData.append("category", selectedCategory);
-    formData.append("address", petData?.address);
-    formData.append("vaccination_status", petData?.vaccination_status);
-    formData.append("health_issue", petData?.health_issue);
-    formData.append("medication", petData?.medication);
-    formData.append("breed", selectedBreed);
-    formData.append("description", petData?.description);
+    // Append all form fields to FormData
+    formData.append("name", petData.name);
+    formData.append("image", petData.image);
+    formData.append("age", petData.age);
+    formData.append("gender", petData.gender);
+    formData.append("category", selectedCategory); // Use selected category
+    formData.append("address", petData.address);
+    formData.append("vaccination_status", petData.vaccination_status);
+    formData.append("health_issue", petData.health_issue);
+    formData.append("medication", petData.medication);
+    formData.append("breed", selectedBreed); // Use selected breed
+    formData.append("description", petData.description);
     formData.append("owner", user._id);
-
-    // for (let [key, value] of formData.entries()) {
-    //   console.log(`${key}:`, value);
-    // }
 
     try {
       // Send the form data using Axios
@@ -103,7 +129,9 @@ const AddPetForm = () => {
           },
         }
       );
+
       if (response?.data) {
+        // Reset form data
         setPetData({
           name: "",
           image: "",
@@ -111,18 +139,22 @@ const AddPetForm = () => {
           gender: "",
           category: "",
           address: "",
-          owner: "",
+          owner: user._id,
           vaccination_status: "",
           health_issue: "",
           medication: "",
+          breed: "",
           description: "",
         });
-        toast.success("Pet added success");
+        setSelectedCategory("");
+        setSelectedBreed("");
+        setImagePreview("");
+        toast.success("Pet added successfully");
         navigate("/");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      console.log(error.response);
+      toast.error("Failed to add pet. Please try again.");
     }
   };
 
@@ -166,25 +198,34 @@ const AddPetForm = () => {
           <option value="male">Male</option>
           <option value="female">Female</option>
         </select>
+
         <label>Category:</label>
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
+          required
         >
           <option value="">Select Category</option>
-          {category?.map((data, index) => (
-            <option key={index} value={data._id}>
-              {data.category_name}
+          {categories.map((category) => (
+            <option key={category._id} value={category._id}>
+              {category.category_name}
             </option>
           ))}
         </select>
 
-        {/* <label>Category (Object ID):</label>
-        <input required
-          type="text"
-          value={petData.category}
-          onChange={(e) => setPetData({ ...petData, category: e.target.value })}
-        /> */}
+        <label>Breed:</label>
+        <select
+          value={selectedBreed}
+          onChange={(e) => setSelectedBreed(e.target.value)}
+          required
+        >
+          <option value="">Select Breed</option>
+          {breeds?.map((breed) => (
+            <option key={breed._id} value={breed._id}>
+              {breed.breed_name}
+            </option>
+          ))}
+        </select>
 
         <label>Address:</label>
         <input
@@ -194,23 +235,13 @@ const AddPetForm = () => {
           onChange={(e) => setPetData({ ...petData, address: e.target.value })}
         />
 
-        {/* <label>Owner (Object ID):</label>
-        <input required
-          type="text"
-          value={petData.owner}
-          onChange={(e) => setPetData({ ...petData, owner: e.target.value })}
-        /> */}
-
         <label>Vaccination Status:</label>
         <input
           required
           type="text"
           value={petData.vaccination_status}
           onChange={(e) =>
-            setPetData({
-              ...petData,
-              vaccination_status: e.target.value,
-            })
+            setPetData({ ...petData, vaccination_status: e.target.value })
           }
         />
 
@@ -233,18 +264,6 @@ const AddPetForm = () => {
             setPetData({ ...petData, medication: e.target.value })
           }
         />
-        <label>Category:</label>
-        <select
-          value={selectedBreed}
-          onChange={(e) => setSelectedBreed(e.target.value)}
-        >
-          <option value="">Select Breed</option>
-          {breed?.map((data, index) => (
-            <option key={index} value={data.breed_name}>
-              {data?.breed_name}
-            </option>
-          ))}
-        </select>
 
         <label>Description:</label>
         <textarea

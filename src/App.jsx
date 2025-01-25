@@ -139,8 +139,8 @@ const App = () => {
           <Route path="/add-breed" element={<AddBreed />} />
           <Route path="/add-category" element={<AddCategory />} />
           <Route path="/category" element={<Category />} />
-          <Route path='/ecommerce' element={<Ecommerce/>}/>
-          <Route path='/add-product' element={<AddProduct/>}/>
+          <Route path='/ecommerce' element={<Ecommerce />} />
+          <Route path='/add-product' element={<AddProduct />} />
         </Routes>
       </div>
     </div>
