@@ -14,7 +14,8 @@ const AddBreed = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/getAllCategory`);
-        setCategories(response.data);
+        console.log(response.data)
+        setCategories(response.data.data);
       } catch (error) {
         toast.error("Failed to fetch categories. Please try again.");
       }
@@ -30,12 +31,14 @@ const AddBreed = () => {
         `${import.meta.env.VITE_BACKEND_URL}/addbreed`,
         { breed_name: breedName, category_id: selectedCategory }
       );
-      if (response.status === 200) {
+      console.log(response)
+      if (response.status === 201) {
         toast.success("Breed added successfully!");
         navigate("/breed");
       }
     } catch (error) {
       toast.error("Failed to add breed. Please try again.");
+      console.log(error.response)
     }
   };
 
@@ -63,7 +66,7 @@ const AddBreed = () => {
           required
         >
           <option value="">Select a category</option>
-          {categories.map((category) => (
+          {categories?.map((category) => (
             <option key={category._id} value={category._id}>
               {category.category_name}
             </option>

@@ -19,7 +19,7 @@ const Breed = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/getallbreed`
       ); // API call to fetch all breeds
-      setBreeds(response.data);
+      setBreeds(response.data.data);
     } catch (error) {
       console.error("Error fetching breeds:", error);
     }
