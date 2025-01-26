@@ -15,7 +15,7 @@ const AddBreed = () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/getAllCategory`);
         console.log(response.data)
-        setCategories(response.data.data);
+        setCategories(response.data);
       } catch (error) {
         toast.error("Failed to fetch categories. Please try again.");
       }
